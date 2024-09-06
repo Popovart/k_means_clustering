@@ -5,7 +5,7 @@ import random
 from sklearn.cluster import KMeans
 from matplotlib.colors import ListedColormap
 
-# Функция для записи случайных данных в CSV
+# Funkce pro zápis náhodných dat do CSV
 def writeCSV(filename, rows, cols):
     with open(filename, 'w', newline='') as file:
         writer = csv.writer(file)
@@ -13,7 +13,7 @@ def writeCSV(filename, rows, cols):
             row = [random.uniform(1.0, 10.0) for _ in range(cols)]
             writer.writerow(row)
 
-# Функция для чтения данных из CSV
+# Funkce pro čtení dat z CSV
 def readCSV(filename):
     data = []
     with open(filename, 'r') as file:
@@ -22,45 +22,45 @@ def readCSV(filename):
             data.append([float(x) for x in row])
     return np.array(data)
 
-# Генерация случайных данных и запись в CSV
+# Generování náhodných dat a zápis do CSV
 filename = 'data.csv'
-writeCSV(filename, 100, 2)  # 100 строк, 2 столбца
+writeCSV(filename, 100, 2)  # 100 řádků, 2 sloupce
 
-# Чтение данных из CSV
+# Čtení dat z CSV
 data = readCSV(filename)
 
-# Количество кластеров
-k = 5  # Пример с более чем 20 кластерами
+# Počet clusterů
+k = 5  # Příklad s více než 20 clustery
 
-# Инициализация и обучение KMeans
+# Inicializace a trénování KMeans
 kmeans = KMeans(n_clusters=k, max_iter=100)
 kmeans.fit(data)
 
-# Получение центроидов и присвоение кластеров
+# Získání centroidů a přiřazení clusterů
 centroids = kmeans.cluster_centers_
 assignments = kmeans.labels_
 
-# Создание фигуры с двумя подграфиками
-fig, axs = plt.subplots(1, 2, figsize=(14, 6))  # 1 строка, 2 столбца
+# Vytvoření obrázku s dvěma podgrafy
+fig, axs = plt.subplots(1, 2, figsize=(14, 6))  # 1 řádek, 2 sloupce
 
-# Подграфик 1: данные до кластеризации
+# Podgraf 1: data před klastrováním
 axs[0].scatter(data[:, 0], data[:, 1], s=30, color='gray')
-axs[0].set_title("Data Before K-Means Clustering")
+axs[0].set_title("Data před K-Means klastrováním")
 
-# Функция для генерации нужного количества цветов
+# Funkce pro generování požadovaného počtu barev
 def generate_colors(num_colors):
-    cmap = plt.cm.get_cmap('tab20b', num_colors)  # Используем большую палитру
+    cmap = plt.cm.get_cmap('tab20b', num_colors)  # Použití větší palety
     return cmap(np.linspace(0, 1, num_colors))
 
-# Генерация цветов для кластеров
+# Generování barev pro clustery
 colors = generate_colors(k)
 
-# Подграфик 2: данные после кластеризации
+# Podgraf 2: data po klastrování
 for i in range(len(data)):
     axs[1].scatter(data[i][0], data[i][1], color=colors[assignments[i] % len(colors)], s=30)
 for i in range(len(centroids)):
     axs[1].scatter(centroids[i][0], centroids[i][1], color=colors[i % len(colors)], s=100, marker='x')
-axs[1].set_title("K-Means Clustering")
+axs[1].set_title("K-Means klastrování")
 
-# Показать оба графика
+# Zobrazit oba grafy
 plt.show()
